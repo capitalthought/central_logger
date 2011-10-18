@@ -18,6 +18,7 @@ module CentralLogger
 
     def initialize(options={})
       path = options[:path] || File.join(Rails.root, "log/#{Rails.env}.log")
+      @mongo_collection_name = options[:collection] || "#{Rails.env}_log"
       level = options[:level] || DEBUG
       internal_initialize
       if disable_file_logging?
@@ -101,7 +102,6 @@ module CentralLogger
 
       def configure
         default_capsize = Rails.env.production? ? PRODUCTION_COLLECTION_SIZE : DEFAULT_COLLECTION_SIZE
-        @mongo_collection_name = "#{Rails.env}_log"
         @authenticated = false
         @db_configuration = {
           'host' => 'localhost',
